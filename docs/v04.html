@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <title>A07: Black Boxes</title>
+    <style>
+        .standardTable  {border: solid;
+                        border-collapse: collapse}
+        .blackBox   {border: solid;
+                    height: 100px;
+                    width: 100px;
+                    text-align: center;
+                    background-color: black;
+                    border-color: white;
+                    color: yellow}
+    </style>
+    <script>
+        function display(number) {
+            // just display the number in a <p> tag for now
+            document.getElementById("decimalInput").innerHTML=number
+        }
+    </script>
+  </head>
+  <body>
+    <h4>Black Boxes</h4>
+      <table class="standardTable">
+        <tr>
+            <td class="blackBox">Keypad</br>
+              <button type="button" onclick="display(1)">1</button>
+              <button type="button" onclick="display(2)">2</button>
+              <button type="button" onclick="display(3)">3</button><br/>
+              <button type="button" onclick="display(4)">4</button>
+              <button type="button" onclick="display(5)">5</button>
+              <button type="button" onclick="display(6)">6</button><br/>
+              <button type="button" onclick="display(7)">7</button>
+              <button type="button" onclick="display(8)">8</button>
+              <button type="button" onclick="display(9)">9</button><br/>
+              <button type="button" onclick="display(0)">0</button>
+          </td>  
+          <td class="blackBox">Decimal to Binary
+              <p id="decimalInput">??</p>
+          </td>
+          <td class="blackBox">Binary to SSD Signals</td>
+          <td class="blackBox">Iluminate Segments</td>
+        </tr> 
+      </table>
+  </body>
+</html>
