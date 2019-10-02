@@ -1,0 +1,198 @@
+<html>
+  <head>
+    <title>A013: Styling the 7-Segment Display</title>
+    <style>
+        .standardTable  {border: solid;
+                        border-collapse: collapse; text-align: center; vertical-align: top;}
+        .blackBox   {border: solid;
+                    height: 100px;
+                    width: 100px;
+                    text-align: center;
+                    vertical-align: top;
+                    background-color: black;
+                    border-color: white;
+                    color: yellow}
+        .sevenSegmentTable  {color:white; border-color: white;
+                            border: solid; border-collapse: collapse; text-align: center}
+        .notsevenSegmentTable   {border: none;}
+        .horizontal    {width: 40px; height: 10px}
+        .vertical      {width: 10px; height: 40px;}
+        .red           {background-color: red;}
+        .black         {background-color: black;}
+        .corner        {width: 10px; height: 10px;}
+        .middle        {width: 40px; height: 40px;}
+    </style>
+    <script>
+        function display(number) {
+            // just display the number in a <p> tag for now
+            document.getElementById("decimal_input").innerHTML=number
+            var bin = dec2bin(number)
+            document.getElementById("binary_output").innerHTML=bin
+            
+            //send binary number to function bin2ssd()
+            document.getElementById("binary2ssd_input").innerHTML=bin
+            var ssd = bin2ssd(bin)
+            document.getElementById("binary2ssd_output").innerHTML=ssd
+            
+            //send ssd signals to to function illuminateSegmnents()
+            document.getElementById("illuminate_input").innerHTML=ssd
+            illuminate(ssd) 
+            document.getElementById("illuminate_output").innerHTML='done'
+        }
+        
+        function bin2ssd(binary) {
+            //convert the 4 bit input string into w,x,y,z variables
+            var w = false //set them all to false at first, then change if imput is '1'
+            var x = false
+            var y = false
+            var z = false
+            if (binary[0] == '1') {w = true}
+            if (binary[1] == '1') {x = true}
+            if (binary[2] == '1') {y = true}
+            if (binary[3] == '1') {z = true}
+            //compute the value of logical expression for each segment
+            var a = !w&x&z || w&!x&!y || !x&!y&!z || !w&y
+            var b = !w&!x&!y || !w&!x&y || !w&x&!y&!z || !w&x&y&z || w&!x&!y
+            var c = !w&!x&y&z || !w&x || !x&!y
+            var d = !w&!x&!z || !w&!x&y&z || !w&x&!y&z || !w&x&y&!z || w&!x&!y
+            var e = !w&!x&!z || !w&x&y&!z || w&!x&!y&!z
+            var f = !w&!y&!z || !w&x&!y&z || !w&x&y&!z || w&!x&!y
+            var g = !w&!x&y || !w&x&!y || !w&x&y&!z || w&!x&!y
+            //assemble and return the output
+            //build up the output string element by element
+            var output = ''
+             if (a) {output = output + '1'} else {output = output + '0'}
+             if (b) {output = output + '1'} else {output = output + '0'}
+             if (c) {output = output + '1'} else {output = output + '0'}
+             if (d) {output = output + '1'} else {output = output + '0'}
+             if (e) {output = output + '1'} else {output = output + '0'}
+             if (f) {output = output + '1'} else {output = output + '0'}
+             if (g) {output = output + '1'} else {output = output + '0'}            
+             return (output) //an initial value to just illuminate segment A
+        }
+        function illuminate(signals) {
+            document.getElementById("segments").innerHTML = signals
+            if (signals[0] == '1')  {
+                document.getElementById("segmentA").innerHTML = ''
+                document.getElementById("segmentA").setAttribute("class", "red")}
+            else {document.getElementById("segmentA").innerHTML = ''
+                document.getElementById("segmentA").setAttribute("class", "black")}
+            if (signals[1] == '1')  {
+                document.getElementById("segmentB").innerHTML = ''
+                document.getElementById("segmentB").setAttribute("class", "red")}
+            else {document.getElementById("segmentB").innerHTML = ''
+                document.getElementById("segmentB").setAttribute("class", "black")}
+            if (signals[2] == '1')  {
+                document.getElementById("segmentC").innerHTML = ''
+                document.getElementById("segmentC").setAttribute("class", "red")}
+            else {document.getElementById("segmentC").innerHTML = ''
+                document.getElementById("segmentC").setAttribute("class", "black")}
+            if (signals[3] == '1')  {
+                document.getElementById("segmentD").innerHTML = ''
+                document.getElementById("segmentD").setAttribute("class", "red")}
+            else {document.getElementById("segmentD").innerHTML = ''
+                 document.getElementById("segmentD").setAttribute("class", "black")}
+            if (signals[4] == '1')  {
+                document.getElementById("segmentE").innerHTML = ''
+                document.getElementById("segmentE").setAttribute("class", "red")}
+            else {document.getElementById("segmentE").innerHTML = ''
+                 document.getElementById("segmentE").setAttribute("class", "black")}
+            if (signals[5] == '1')  {
+                document.getElementById("segmentF").innerHTML = ''
+               document.getElementById("segmentF").setAttribute("class", "red")}
+            else {document.getElementById("segmentF").innerHTML = ''
+                 document.getElementById("segmentF").setAttribute("class", "black")}
+            if (signals[6] == '1')  {
+                document.getElementById("segmentG").innerHTML = ''
+                document.getElementById("segmentG").setAttribute("class", "red")}
+            else {document.getElementById("segmentG").innerHTML = ''
+                document.getElementById("segmentG").setAttribute("class", "black")}
+        }
+        
+        function dec2bin (decimal) {
+            // convert decimal to binary using a non-algorithmic solution. pull position of the array to return a binary result.
+            binary = ['0000','0001','0010','0011','0100',
+             '01001','0110','0111','1000','1001']
+            return(binary[decimal])
+        }
+    
+        function dec2bin (decimal) {
+            var quotient = decimal
+            var output = ''
+            while (quotient > 0) {
+                //the % operator is "divide and report remainder"
+                remainder = quotient % 2
+                if (remainder == 1)
+                    {output = '1' + output}
+                else
+                    {output = '0' + output}
+                //Math is a set of tools for doing math in javascript. Their names are always Math.something
+                quotient = Math.floor(quotient/2)
+            }
+            //The above algorithm leaves off all the leading zeros, so we will "pad" the output now by adding in a while loop. We don't want to pad a 4 digit binary though.
+            //We will use a method called "length" to report the length of the string and then we'll add a char string variable it if the length is less than 4.
+            while (output.length < 4) {output = '0' + output}
+            return(output)
+        }
+    </script>
+  </head>
+  <body>
+    <h4>Version 9: Styling the 7-Segment Display</h4>
+      <table class="standardTable">
+        <tr>
+            <td class="blackBox"><h3>Keypad</h3>
+              <button type="button" onclick="display(1)">1</button>
+              <button type="button" onclick="display(2)">2</button>
+              <button type="button" onclick="display(3)">3</button><br/>
+              <button type="button" onclick="display(4)">4</button>
+              <button type="button" onclick="display(5)">5</button>
+              <button type="button" onclick="display(6)">6</button><br/>
+              <button type="button" onclick="display(7)">7</button>
+              <button type="button" onclick="display(8)">8</button>
+              <button type="button" onclick="display(9)">9</button><br/>
+              <button type="button" onclick="display(0)">0</button>
+          </td>  
+          <td class="blackBox"><h3>Decimal to Binary</h3>
+              <p id="decimal_input">??</p>
+              <p id="binary_output">??</p>
+          </td>
+          <td class="blackBox"><h3>Binary to SSD Signals</h3>
+              <p id="binary2ssd_input"></p>
+              <p id="binary2ssd_output"></p>
+            </td>
+          <td class="blackBox"><h3>Iluminate Segments</h3>
+              <table>
+              <tr>
+                <td class="notsevenSegmentTable corner">1</td>
+                <td id="segmentA" class="sevenSegmentTable horizontal">A</td>    
+                <td class="notsevenSegmentTable corner">3</td>    
+              </tr>
+              <tr>
+                <td id="segmentF" class="sevenSegmentTable vertical">F</td>
+                <td class="notsevenSegmentTable middle">2</td>    
+                <td id="segmentB" class="sevenSegmentTable vertical">B</td>    
+              </tr>
+              <tr>
+                <td class="notsevenSegmentTable corner">1</td>
+                <td id="segmentG" class="sevenSegmentTable horizontal">G</td>    
+                <td class="notsevenSegmentTable corner">3</td>    
+              </tr>
+              <tr>
+                <td id="segmentE" class="sevenSegmentTable vertical">E</td>
+                <td class="notsevenSegmentTable middle">2</td>    
+                <td id="segmentC" class="sevenSegmentTable vertical">C</td>    
+              </tr>
+              <tr>
+                <td class="notsevenSegmentTable corner">1</td>
+                <td id="segmentD" class="sevenSegmentTable horizontal">D</td>    
+                <td class="notsevenSegmentTable corner">3</td>    
+              </tr>
+              </table>
+              <p id="segments"></p>
+              <p id="illuminate_input"></p>
+              <p id="illuminate_output"></p>
+          </td>
+        </tr> 
+      </table>
+  </body>
+</html>
